@@ -1,26 +1,42 @@
-import React from 'react';
+import type React from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardFooter } from "./ui/card";
+import type { Product } from "@/lib/utils";
 
-interface ProductItemProps {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  onSelect: (id: number) => void;
-  onDelete: (id: number) => void;
+interface ProductItemProps extends Product {
+	onSelect: (id: number) => void;
+	onDelete: (id: number) => void;
 }
 
-export const ProductItem: React.FC<ProductItemProps> = ({ id, name, description, image, onSelect, onDelete }) => {
-  return (
-    <div className="flex items-center justify-between bg-gray-100 p-2 mb-2">
-      <div className="flex items-center cursor-pointer" onClick={() => onSelect(id)}>
-        <img src={image} alt={name} className="w-12 h-12 object-cover mr-2" />
-        <div>
-          <h3 className="font-bold">{name}</h3>
-          <p className="text-sm">{description}</p>
-        </div>
-      </div>
-      <Button variant="destructive" onClick={() => onDelete(id)}>Delete</Button>
-    </div>
-  );
+export const ProductItem: React.FC<ProductItemProps> = ({
+	id,
+	name,
+	description,
+	imageUrl,
+	onSelect,
+	onDelete,
+}) => {
+	return (
+		<Card key={id} className="overflow-hidden">
+			<CardHeader className="p-0">
+				<img src={imageUrl} alt={name} className="w-full h-48 object-cover" />
+			</CardHeader>
+			<CardContent className="p-4">
+				<h3 className="font-bold text-lg">{name}</h3>
+				<p className="text-sm text-gray-600 mt-2">{description}</p>
+			</CardContent>
+			<CardFooter className="flex justify-between p-4">
+				<Button onClick={() => onSelect(id)}>View</Button>
+				<Button
+					variant="destructive"
+					onClick={(e) => {
+						e.stopPropagation();
+						onDelete(id);
+					}}
+				>
+					Delete
+				</Button>
+			</CardFooter>
+		</Card>
+	);
 };

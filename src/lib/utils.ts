@@ -40,3 +40,8 @@ export const initialProducts: Product[] = [
 		imageUrl: "https://via.placeholder.com/150",
 	},
 ];
+
+export const sortOptions = [
+	{ value: "name", label: "Name" },
+	{ value: "creationDate", label: "Recently Added" },
+];

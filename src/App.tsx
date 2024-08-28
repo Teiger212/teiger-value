@@ -1,16 +1,10 @@
 import React from "react";
 import { useLocalStorage, useDebounceValue } from "usehooks-ts";
 import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { CustomSelect } from "@/components/ui/customSelect";
 import { AddProductDialog } from "@/components/AddProductDialog";
 import { ProductsDisplaySection } from "@/components/ProductsDisplaySection";
-import { type Product, initialProducts } from "@/lib/utils";
+import { type Product, initialProducts, sortOptions } from "@/lib/utils";
 
 const App: React.FC = () => {
 	const [products, setProducts] = useLocalStorage<Product[]>(
@@ -86,11 +80,11 @@ const App: React.FC = () => {
 		setProducts([...products, productToAdd]);
 	};
 
-	const handleSort = (value: "name" | "creationDate") => {
+	const handleSort = (value: string) => {
 		if (value === sortKey) {
 			setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
 		} else {
-			setSortKey(value);
+			setSortKey(value as "name" | "creationDate");
 			setSortDirection("asc");
 		}
 	};
@@ -115,15 +109,12 @@ const App: React.FC = () => {
 							className="max-w-sm bg-white"
 						/>
 					</div>
-					<Select onValueChange={handleSort}>
-						<SelectTrigger className="w-44 bg-white">
-							<SelectValue placeholder="Sort by" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="name">Name</SelectItem>
-							<SelectItem value="creationDate">Recently Added</SelectItem>
-						</SelectContent>
-					</Select>
+					<CustomSelect
+						sortDirection={sortDirection}
+						options={sortOptions}
+						onSelect={handleSort}
+						placeholder="Sort by"
+					/>
 				</div>
 				<ProductsDisplaySection
 					products={sortedAndFilteredProducts}
